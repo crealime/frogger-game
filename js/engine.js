@@ -13,7 +13,7 @@
  * writing app.js a little simpler to work with.
  */
 
-var Engine = (function(global) {
+const Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas element's height/width and add it to the DOM.
@@ -79,8 +79,66 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
+
+	function checkCollisions() {
+		allEnemies.forEach(function(enemy) {
+			if (player.x < enemy.x + 70 &&
+				player.x + 70 > enemy.x &&
+				player.y < enemy.y + 80 &&
+				player.y + 80 > enemy.y) reloadGame()
+		})
+
+		allStars.forEach(function(star, i) {
+			if (player.x < star.x + 70 &&
+				player.x + 70 > star.x &&
+				player.y < star.y + 80 &&
+				player.y + 80 > star.y) {
+				delete allStars[i]
+				if (allStars.every(el => el == '')) reloadStars(true)
+			}
+		})
+	}
+
+	function setStars(img) {
+		setTimeout(() => allStars = createStars(img), 300)
+	}
+
+	function reloadStars(isCollision) {
+		if (isCollision) {
+			if (player.level === 1) {
+				player.level = 2
+				setStars('images/Gem Green.png')
+			}
+			else if (player.level === 2) {
+				player.level = 3
+				setStars('images/Gem Orange.png')
+			}
+			else if (player.level === 3) {
+				alert('You won!')
+				player.level = 1
+				setStars('images/Gem Blue.png')
+			}
+		}
+		else {
+			if (player.level === 1) {
+				setStars('images/Gem Blue.png')
+			}
+			else if (player.level === 2) {
+				setStars('images/Gem Green.png')
+			}
+			else if (player.level === 3) {
+				setStars('images/Gem Orange.png')
+			}
+		}
+	}
+
+	function reloadGame() {
+		player.x = 200
+		player.y = 380
+		reloadStars(false)
+	}
 
     /* This is called by the update function and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
@@ -149,6 +207,10 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+		allStars.forEach(function(star) {
+			star.render();
+		});
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
@@ -161,8 +223,9 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
-    }
+		const canvas = document.querySelector('canvas')
+		canvas.addEventListener('click', (e) => player.click(e))
+	}
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
@@ -173,7 +236,14 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
+        'images/Gem Blue.png',
+        'images/Gem Green.png',
+        'images/Gem Orange.png',
+        'images/Star.png',
     ]);
     Resources.onReady(init);
 
