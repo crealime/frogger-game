@@ -225,6 +225,7 @@ const Engine = (function(global) {
     function reset() {
 		const canvas = document.querySelector('canvas')
 		canvas.addEventListener('click', (e) => player.click(e))
+		canvas.addEventListener("touchstart", (e) => player.tap(e))
 	}
 
     /* Go ahead and load all of the images we know we're going to need to

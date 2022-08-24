@@ -97,7 +97,23 @@ class Player {
 			else player.x += 101
 		}
 		else {
-			if (player.y > e.offsetY - 100) player.y -= 83
+			if (player.y > e.offsetY - 130) player.y -= 83
+			else player.y += 83
+		}
+	}
+
+	tap(e) {
+		e.preventDefault()
+
+		const diffX = Math.abs(player.x - e.touches[0].clientX + 60)
+		const diffY = Math.abs(player.y - e.touches[0].clientY + 190)
+
+		if (diffX > diffY) {
+			if (player.x > e.touches[0].clientX - 60) player.x -= 101
+			else player.x += 101
+		}
+		else {
+			if (player.y > e.touches[0].clientY - 190) player.y -= 83
 			else player.y += 83
 		}
 	}
