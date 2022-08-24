@@ -115,7 +115,7 @@ const Engine = (function(global) {
 				player.level = 3
 				setStars('images/Gem Orange.png')
 			}
-			else if (player.level === 3) {
+			else {
 				alert('You won!')
 				player.level = 1
 				setStars('images/Gem Blue.png')
@@ -128,7 +128,7 @@ const Engine = (function(global) {
 			else if (player.level === 2) {
 				setStars('images/Gem Green.png')
 			}
-			else if (player.level === 3) {
+			else {
 				setStars('images/Gem Orange.png')
 			}
 		}

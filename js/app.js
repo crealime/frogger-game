@@ -19,15 +19,8 @@ class Enemy  {
 			this.x = -100
 			this.speed = 100 + Math.floor(Math.random() * 300)
 		}
-
-		// if (player.x < this.x + 70 &&
-		// 	player.x + 70 > this.x &&
-		// 	player.y < this.y + 80 &&
-		// 	player.y + 80 > this.y) {
-		// 	player.x = 200
-		// 	player.y = 380
-		// }
 	}
+
 	render() {
 		ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
 	}
