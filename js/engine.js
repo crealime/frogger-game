@@ -83,45 +83,55 @@ const Engine = (function(global) {
     }
 
 	function checkCollisions() {
+		// Crossing the player with a enemy
 		allEnemies.forEach(function(enemy) {
 			if (player.x < enemy.x + 70 &&
 				player.x + 70 > enemy.x &&
 				player.y < enemy.y + 80 &&
-				player.y + 80 > enemy.y) reloadGame()
+				player.y + 80 > enemy.y) reloadLevel(false)
 		})
 
+		// Crossing the player with a star
 		allStars.forEach(function(star, i) {
 			if (player.x < star.x + 70 &&
 				player.x + 70 > star.x &&
 				player.y < star.y + 80 &&
 				player.y + 80 > star.y) {
 				delete allStars[i]
-				if (allStars.every(el => el == '')) reloadStars(true)
+				if (allStars.every(el => el == '')) reloadLevel(true)
 			}
 		})
 	}
 
+	// Fill array of stars
 	function setStars(img) {
 		setTimeout(() => allStars = createStars(img), 300)
 	}
 
-	function reloadStars(isCollision) {
-		if (isCollision) {
+	// Reload or up level
+	function reloadLevel(levelUp) {
+		if (levelUp) {
 			if (player.level === 1) {
 				player.level = 2
+				allEnemies = creteEnemies(allEnemies.length + 1)
 				setStars('images/Gem Green.png')
 			}
 			else if (player.level === 2) {
 				player.level = 3
+				allEnemies = creteEnemies(allEnemies.length + 1)
 				setStars('images/Gem Orange.png')
 			}
 			else {
 				alert('You won!')
 				player.level = 1
+				numOfEnemies = window.prompt('Enter the initial number of enemies (1-6)', 3);
+				allEnemies = creteEnemies(+numOfEnemies || 3)
 				setStars('images/Gem Blue.png')
 			}
 		}
 		else {
+			player.x = 200
+			player.y = 380
 			if (player.level === 1) {
 				setStars('images/Gem Blue.png')
 			}
@@ -132,12 +142,6 @@ const Engine = (function(global) {
 				setStars('images/Gem Orange.png')
 			}
 		}
-	}
-
-	function reloadGame() {
-		player.x = 200
-		player.y = 380
-		reloadStars(false)
 	}
 
     /* This is called by the update function and loops through all of the

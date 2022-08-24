@@ -157,9 +157,8 @@ function createStars(img) {
 	return arrStars
 }
 
-numOfEnemies = window.prompt('Enter number of enemies (1-6)', 3);
-const allEnemies = creteEnemies(+numOfEnemies || 3)
-// const allEnemies = creteEnemies(6)
+let numOfEnemies = window.prompt('Enter the initial number of enemies (1-6)', 3);
+let allEnemies = creteEnemies(+numOfEnemies || 3)
 let allStars = createStars('images/Gem Blue.png')
 const player = new Player(200, 380, 'images/char-cat-girl.png')
 
