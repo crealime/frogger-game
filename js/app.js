@@ -4,10 +4,11 @@ const ROWS = 6
 const COLUMNS = 5
 const START_ROW = 5
 const START_COLUMN = 2
-const WIDTH_CANVAS = COLUMNS * X_SIZE
-const HEIGHT_CANVAS = ROWS * Y_SIZE
+const WIDTH_FIELD = COLUMNS * X_SIZE
+const HEIGHT_FIELD = ROWS * Y_SIZE
 const Y_OFFSET_PLAYER = 35
-const Y_OFFSET_ENEMY = 33
+const Y_OFFSET_ENEMY = 35
+const X_OFFSET_ENEMY = 20
 const START_PLAYER_X_POSITION = X_SIZE * START_COLUMN
 const START_PLAYER_Y_POSITION = Y_SIZE * START_ROW - Y_OFFSET_PLAYER
 const DEFAULT_NUM_OF_ENEMIES = 3
@@ -19,13 +20,13 @@ const MIN_SPEED = 100
 const MAX_SPEED = 300
 const PLAYER_IMG = 'images/char-cat-girl.png'
 const ENEMY_IMG = 'images/enemy-bug.png'
-const STARS_IMG = {
+const STARS_IMG_LEVEL = {
   1: 'images/Gem Blue.png',
   2: 'images/Gem Green.png',
   3: 'images/Gem Orange.png',
   4: 'images/Gem Red.png',
 }
-const MAX_LEVEL = Object.keys(STARS_IMG).length
+const MAX_LEVEL = Object.keys(STARS_IMG_LEVEL).length
 
 let offsetLeft = 0
 let offsetTop = 0
@@ -65,7 +66,7 @@ Enemy.prototype.update = function(dt) {
 	// all computers.
 	this.x += this.speed * dt
 
-	if (this.x > WIDTH_CANVAS) {
+	if (this.x > WIDTH_FIELD) {
 		this.x = -X_SIZE
 		this.speed = randomMinMax(MIN_SPEED, MAX_SPEED)
 	}
@@ -74,10 +75,10 @@ Enemy.prototype.update = function(dt) {
 }
 
 Enemy.prototype.collisions = function() {
-	if (this.antagonist.x < this.x + 70 &&
-		this.antagonist.x + 70 > this.x &&
-		this.antagonist.y < this.y + 80 &&
-		this.antagonist.y + 80 > this.y) reloadLevel(false)
+	if (this.antagonist.x < this.x + X_SIZE / 2 + X_OFFSET_ENEMY &&
+      this.antagonist.x > this.x - X_SIZE / 2 - X_OFFSET_ENEMY &&
+      this.antagonist.y < this.y + Y_SIZE / 2 + Y_OFFSET_ENEMY &&
+      this.antagonist.y > this.y - Y_SIZE / 2 - Y_OFFSET_ENEMY) reloadLevel(false)
 }
 
 // Update the enemy's position, required method for game
@@ -105,9 +106,9 @@ const Player = function (x, y, sprite) {
 Player.prototype = Object.create(Thing.prototype)
 
 Player.prototype.update = function () {
-	if (this.x > WIDTH_CANVAS - X_SIZE) this.x = WIDTH_CANVAS - X_SIZE
+	if (this.x > WIDTH_FIELD - X_SIZE) this.x = WIDTH_FIELD - X_SIZE
 	if (this.x < 0) this.x = 0
-	if (this.y > START_PLAYER_Y_POSITION) this.y = START_PLAYER_Y_POSITION
+	if (this.y > HEIGHT_FIELD - Y_OFFSET_PLAYER * 2) this.y = START_PLAYER_Y_POSITION
 	if (this.y < 0)
 		setTimeout(() => {
 			this.x = START_PLAYER_X_POSITION
@@ -177,12 +178,10 @@ Star.prototype.update = function() {
 }
 
 Star.prototype.collisions = function() {
-	if (this.raider.x < this.x + 70 &&
-		this.raider.x + 70 > this.x &&
-		this.raider.y < this.y + 80 &&
-		this.raider.y + 80 > this.y) {
-		reloadLevel(true, this.index)
-	}
+  if (this.raider.x < this.x + X_SIZE / 2 + X_OFFSET_ENEMY &&
+    this.raider.x > this.x - X_SIZE / 2 - X_OFFSET_ENEMY &&
+    this.raider.y < this.y + Y_SIZE / 2 + Y_OFFSET_ENEMY &&
+    this.raider.y > this.y - Y_SIZE / 2 - Y_OFFSET_ENEMY) reloadLevel(true, this.index)
 }
 
 // Now instantiate your objects.
@@ -219,7 +218,7 @@ const player = new Player(START_PLAYER_X_POSITION, START_PLAYER_Y_POSITION, PLAY
 const allEnemies = []
 const allStars = []
 creteEnemies(DEFAULT_NUM_OF_ENEMIES)
-createStars(STARS_IMG[1])
+createStars(STARS_IMG_LEVEL[1])
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -250,12 +249,12 @@ function reloadLevel(levelUp, index) {
         alert('You won!')
         player.level = 1
         creteEnemies(DEFAULT_NUM_OF_ENEMIES)
-        setStars(STARS_IMG[player.level])
+        setStars(STARS_IMG_LEVEL[player.level])
       }
       else {
         player.level++
         creteEnemies(allEnemies.length + 1)
-        setStars(STARS_IMG[player.level])
+        setStars(STARS_IMG_LEVEL[player.level])
       }
 		}
 	}
@@ -263,7 +262,7 @@ function reloadLevel(levelUp, index) {
 	else {
     player.x = START_PLAYER_X_POSITION
     player.y = START_PLAYER_Y_POSITION
-    setStars(STARS_IMG[player.level])
+    setStars(STARS_IMG_LEVEL[player.level])
 	}
 }
 
