@@ -191,9 +191,7 @@ function creteEnemies(num) {
 
 	for (let i = 1; i < num + 1; i++) {
     let y = i
-    if (i === 4) y = 1
-    if (i === 5) y = 2
-    if (i === 6) y = 3
+    if (i > 3) y = i - 3
 		y = y * Y_SIZE - Y_OFFSET_ENEMY
 		const x = -randomMinMax(X_SIZE, X_SIZE * 3)
 		const speed = randomMinMax(MIN_SPEED, MAX_SPEED)
