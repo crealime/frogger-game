@@ -75,10 +75,9 @@ Enemy.prototype.update = function(dt) {
 }
 
 Enemy.prototype.collisions = function() {
-	if (this.antagonist.x < this.x + X_SIZE / 2 + X_OFFSET_ENEMY &&
-      this.antagonist.x > this.x - X_SIZE / 2 - X_OFFSET_ENEMY &&
-      this.antagonist.y < this.y + Y_SIZE / 2 + Y_OFFSET_ENEMY &&
-      this.antagonist.y > this.y - Y_SIZE / 2 - Y_OFFSET_ENEMY) reloadLevel(false)
+	if (this.antagonist.y + Y_OFFSET_PLAYER === this.y + Y_OFFSET_ENEMY &&
+      this.antagonist.x < this.x + X_SIZE / 2 + X_OFFSET_ENEMY &&
+      this.antagonist.x > this.x - X_SIZE / 2 - X_OFFSET_ENEMY) reloadLevel(false)
 }
 
 // Update the enemy's position, required method for game
@@ -178,10 +177,8 @@ Star.prototype.update = function() {
 }
 
 Star.prototype.collisions = function() {
-  if (this.raider.x < this.x + X_SIZE / 2 + X_OFFSET_ENEMY &&
-    this.raider.x > this.x - X_SIZE / 2 - X_OFFSET_ENEMY &&
-    this.raider.y < this.y + Y_SIZE / 2 + Y_OFFSET_ENEMY &&
-    this.raider.y > this.y - Y_SIZE / 2 - Y_OFFSET_ENEMY) reloadLevel(true, this.index)
+  if (this.raider.y + Y_OFFSET_PLAYER === this.y + Y_OFFSET_ENEMY &&
+    this.raider.x === this.x) reloadLevel(true, this.index)
 }
 
 // Now instantiate your objects.
